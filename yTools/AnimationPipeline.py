@@ -1,16 +1,17 @@
 # -----------------------------------------------------------------------------
-# Tool: Unreal Engine Animation Pipeline Setup
-# Author: Yogesh Batra (GitHub: AnimYogi)
-# Assistance: Co-created with Google Gemini
-# License: MIT
-# Description: Automates the creation of Levels, Sequences, Cameras, Environment,
-#              and automatically binds actors to the Sequencer.
+# Tool: yTools | Animation Pipeline
+# Version: 1.2
+# Author: Yogesh Batra (AnimYogi)
+# GitHub: https://github.com/AnimYogi/UE-AnimationPipeline
+# Description: Professional-grade automation for UE animation environments.
 # -----------------------------------------------------------------------------
 
 import unreal
 import sys
 
 def generate_level_setup(animation_name):
+    unreal.log(f"yTools: Starting Pipeline Generation for '{animation_name}'...")
+    
     # --- 1. Define Names and Paths ---
     folder_path = "/Game/source"
     master_level_name = "L_Animation_Master"
@@ -42,7 +43,6 @@ def generate_level_setup(animation_name):
     
     if seq_actor and sequence_asset:
         seq_actor.set_sequence(sequence_asset)
-        # [FEATURE 1] Rename the actor in the Outliner to match the sequence asset
         seq_actor.set_actor_label(seq_name)
 
     # --- 6. Spawn Cameras and Bind to Sequencer ---
@@ -51,13 +51,11 @@ def generate_level_setup(animation_name):
     cam_fp = unreal.EditorLevelLibrary.spawn_actor_from_class(camera_class, unreal.Vector(0, 0, 160), unreal.Rotator(0, 0, 0))
     if cam_fp:
         cam_fp.set_actor_label("Camera_FP")
-        # [FEATURE 2] Add First Person Camera to the Level Sequence automatically
         sequence_asset.add_possessable(cam_fp)
         
     cam_tp = unreal.EditorLevelLibrary.spawn_actor_from_class(camera_class, unreal.Vector(-250, 0, 160), unreal.Rotator(0, 0, 0))
     if cam_tp:
         cam_tp.set_actor_label("Camera_TP")
-        # [FEATURE 2] Add Third Person Camera to the Level Sequence automatically
         sequence_asset.add_possessable(cam_tp)
 
     # --- 7. Spawn Environment (Lighting & Floor Plane) ---
@@ -77,7 +75,7 @@ def generate_level_setup(animation_name):
             plane_actor.static_mesh_component.set_static_mesh(plane_mesh)
             plane_actor.set_actor_scale3d(unreal.Vector(10.0, 10.0, 1.0))
         
-    # Save the Sub-level with all new actors inside
+    # Save the Sub-level
     unreal.EditorLevelLibrary.save_current_level()
     
     # --- 8. Create & Open the Master Level ---
@@ -90,7 +88,7 @@ def generate_level_setup(animation_name):
     
     unreal.EditorLevelLibrary.save_current_level()
     
-    unreal.log(f"Success! {animation_name} Levels, Sequence, Bound Cameras, and Environment created successfully.")
+    unreal.log(f"yTools: Success! {animation_name} Pipeline generated.")
 
 # --- 10. Read Console Arguments ---
 if __name__ == "__main__":
