@@ -1,0 +1,8 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.class
+
+# OS generated files
+.DS_Store
+Thumbs.db
