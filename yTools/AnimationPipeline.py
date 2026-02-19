@@ -75,6 +75,21 @@ def generate_level_setup(animation_name):
             plane_actor.static_mesh_component.set_static_mesh(plane_mesh)
             plane_actor.set_actor_scale3d(unreal.Vector(10.0, 10.0, 1.0))
         
+    # --- 7.5 Add Post Process Volume (Fix Exposure) ---
+    pp_volume = unreal.EditorLevelLibrary.spawn_actor_from_class(unreal.PostProcessVolume, unreal.Vector(0, 0, 0))
+    if pp_volume:
+        pp_volume.set_actor_label("PP_Exposure_Fix")
+        
+        # Make it affect the whole world
+        pp_volume.b_unbound = True 
+        
+        # Lock exposure settings
+        settings = pp_volume.settings
+        settings.set_editor_property('override_auto_exposure_min_brightness', True)
+        settings.set_editor_property('override_auto_exposure_max_brightness', True)
+        settings.set_editor_property('auto_exposure_min_brightness', 1.0)
+        settings.set_editor_property('auto_exposure_max_brightness', 1.0)
+    
     # Save the Sub-level
     unreal.EditorLevelLibrary.save_current_level()
     
